@@ -9,7 +9,11 @@ try {
 
     [$id, $gusto, $prezzo, $disponibilita] = $arrKeys;
 
-    updatePizza($id, $gusto, $prezzo, $disponibilita, $db);
+    if (updatePizza($id, $gusto, $prezzo, $disponibilita, $db)) {
+        header("Location: index.php?message=Pizza Modificata con successo!");
+    } else {
+        echo $query->errorInfo();
+    }
 } catch (Exception $e) {
     echo $e->getMessage();
 }

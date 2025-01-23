@@ -7,7 +7,12 @@ try {
         exit;
     }
 
-    deletePizza($_GET['id'], $db);
+    if (deletePizza($_GET['id'], $db)) {
+
+        header("Location: index.php?message=Pizza eliminata");
+    } else {
+        echo $query->errorInfo();
+    }
 } catch (Exception $e) {
     echo $e->getMessage();
 }

@@ -1,6 +1,11 @@
 <?php include_once './includes/header.php'; ?>
 
 <main class="container">
+    <?php if (isset($_GET['message'])): ?>
+        <div class="alert alert-success">
+            <?= $_GET['message'] ?>
+        </div>
+    <?php endif; ?>
 
     <div class="row">
 

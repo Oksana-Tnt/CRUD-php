@@ -8,6 +8,10 @@ try {
     $arrKeys = checkPostFields($availablePostValues);
     [$gusto, $prezzo, $disponibilita] = $arrKeys;
 
+    if ($gusto == "" || $prezzo == "") {
+        header('Location: add-pizza.php?message=Fill in all fields!"');
+    }
+
     if (addPizza($gusto, $prezzo, $disponibilita, $db)) { ?>
         <h2>Pizza creata!</h2>
         <ul>
@@ -15,7 +19,6 @@ try {
             <li>Prezzo: <?= $prezzo ?> €</li>
             <li>Disponibile: <?= $disponibilita == 1 ? 'Si' : 'No' ?></li>
         </ul>
-
 <?php }
 } catch (Exception $e) {
     echo $e->getMessage();

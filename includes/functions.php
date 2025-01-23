@@ -31,7 +31,7 @@ function addPizza(string $gusto, int $prezzo, bool $disponibilita, PDO $db): boo
 
     return $query->execute() ? true : false;
 }
-function updatePizza(int $id, string $gusto, int $prezzo, bool $disponibilita, PDO $db): void
+function updatePizza(int $id, string $gusto, int $prezzo, bool $disponibilita, PDO $db): bool
 {
     $sql = "UPDATE pizze 
     SET gusto=:gusto,prezzo=:prezzo,disponibilita=:disponibilita
@@ -44,13 +44,9 @@ function updatePizza(int $id, string $gusto, int $prezzo, bool $disponibilita, P
     $query->bindParam(':prezzo', $prezzo, PDO::PARAM_INT);
     $query->bindParam(':disponibilita', $disponibilita, PDO::PARAM_BOOL);
 
-    if ($query->execute()) {
-        header("Location: index.php?message=Pizza Modificata con successo!");
-    } else {
-        echo $query->errorInfo();
-    }
+    return $query->execute() ? true : false;
 }
-function deletePizza(int $id, $db): void
+function deletePizza(int $id, $db): bool
 {
     $sql = "DELETE FROM pizze WHERE id = :id";
 
@@ -58,15 +54,10 @@ function deletePizza(int $id, $db): void
 
     $query->bindParam(':id', $id);
 
-    if ($query->execute()) {
-
-        header("Location: index.php?message=Pizza eliminata");
-    } else {
-        echo $query->errorInfo();
-    }
+    return $query->execute() ? true : false;
 }
 
-function checkPostFields(array $availablePostValues): array
+function checkPostFields(array $availablePostValues): array|false
 {
     $arrKey = [];
     if (!$availablePostValues) {
@@ -75,8 +66,7 @@ function checkPostFields(array $availablePostValues): array
 
     foreach ($availablePostValues as $key) {
         if (!isset($_POST[$key]) || (empty($_POST[$key]) && !gettype($_POST[$key]) == 'bool')) {
-            header('Location: add-pizza.php');
-            throw new Exception('Missing ' . $key);
+            return false;
         }
         array_push($arrKey, $$key = $_POST[$key]);
     }
